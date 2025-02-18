@@ -5,12 +5,8 @@ import java.time.LocalDate;
 import kr.co.finotek.lotto.domain.lotto.Lotto;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
-@NoArgsConstructor
 public class LottoResponseDto {
 
 	private String roundNo;
@@ -22,6 +18,18 @@ public class LottoResponseDto {
 	private int sixthNum;
 	private int bonusNum;
 	private LocalDate drawDate;
+	
+	public LottoResponseDto(Lotto entity) {
+		this.roundNo = entity.getRoundNo();
+		this.firstNum = entity.getFirstNum();
+		this.secondNum = entity.getSecondNum();
+		this.thirdNum = entity.getThirdNum();
+		this.fourthNum = entity.getFourthNum();
+		this.fifthNum = entity.getFifthNum();
+		this.sixthNum = entity.getSixthNum();
+		this.bonusNum = entity.getBonusNum();
+		this.drawDate = entity.getDrawDate();
+	}
 	
 	@Builder
 	public LottoResponseDto(String roundNo, int firstNum, int secondNum,

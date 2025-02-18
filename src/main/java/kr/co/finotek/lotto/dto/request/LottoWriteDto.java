@@ -1,14 +1,12 @@
 package kr.co.finotek.lotto.dto.request;
 
+import java.time.LocalDate;
+
 import kr.co.finotek.lotto.domain.lotto.Lotto;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
-@NoArgsConstructor
 public class LottoWriteDto {
 
 	private String roundNo;
@@ -18,9 +16,13 @@ public class LottoWriteDto {
 	private int fourthNum;
 	private int fifthNum;
 	private int sixthNum;
-	
+	private int bonusNum;
+	private LocalDate drawDate;
+
+	@Builder
 	public LottoWriteDto(String roundNo, int firstNum, int secondNum,
-			int thirdNum, int fourthNum, int fifthNum, int sixthNum) {
+			int thirdNum, int fourthNum, int fifthNum, int sixthNum,
+			int bonusNum, LocalDate drawDate) {
 		this.roundNo = roundNo;
 		this.firstNum = firstNum;
 		this.secondNum = secondNum;
@@ -28,19 +30,22 @@ public class LottoWriteDto {
 		this.fourthNum = fourthNum;
 		this.fifthNum = fifthNum;
 		this.sixthNum = sixthNum;
+		this.bonusNum = bonusNum;
+		this.drawDate = drawDate;
 	}
 	
 	/** dto -> entity */
-	@Builder
-	public static Lotto ofEntity(LottoWriteDto dto) {
+	public Lotto toEntity() {
 		return Lotto.builder()
-				.roundNo(dto.roundNo)
-				.firstNum(dto.firstNum)
-				.secondNum(dto.secondNum)
-				.thirdNum(dto.thirdNum)
-				.fourthNum(dto.fourthNum)
-				.fifthNum(dto.fifthNum)
-				.sixthNum(dto.sixthNum)
+				.roundNo(roundNo)
+				.firstNum(firstNum)
+				.secondNum(secondNum)
+				.thirdNum(thirdNum)
+				.fourthNum(fourthNum)
+				.fifthNum(fifthNum)
+				.sixthNum(sixthNum)
+				.bonusNum(bonusNum)
+				.drawDate(drawDate)
 				.build();
 	}
 }

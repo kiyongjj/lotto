@@ -16,10 +16,12 @@ import kr.co.finotek.lotto.dto.LottoNumberDto;
 import kr.co.finotek.lotto.dto.response.LottoResponseDto;
 import kr.co.finotek.lotto.service.LottoMainService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/lotto")
+@Slf4j
 public class LottoMainRestController {
 	
 	private final LottoMainService lottoMainService;
@@ -31,6 +33,15 @@ public class LottoMainRestController {
 		
 		List<String> result = lottoMainService.selectLottoRoundNumber();
 
+		return ResponseEntity.status(HttpStatus.OK).body(result);
+	}
+	
+	
+	@PostMapping("/insertLottoNumber")
+	public ResponseEntity<Object> insertLottoNumbers(@RequestBody LottoNumberDto lottoNumberDto) {
+		
+		boolean result = lottoMainService.insertLottoNumber(lottoNumberDto);
+		
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 	
@@ -49,14 +60,13 @@ public class LottoMainRestController {
 	
 	
 	@PostMapping("/selectLottoNumber")
-	public ResponseEntity<List<LottoNumberDto>> selectLottoNumber(@RequestBody LottoNumberDto lottoNumberDto) {
+	public ResponseEntity<LottoResponseDto> selectLottoNumber(@RequestBody String roundNo) {
+
+		log.debug("roundNo : " + roundNo);
 		
-		System.out.println(lottoNumberDto.getRoundNo());
-		
-		List<LottoNumberDto> result = lottoMainService.selectLottoNumberByRound(lottoNumberDto.getRoundNo());
-		System.out.println("result :: " + result);
-		
-		if(result.isEmpty()) {
+		LottoResponseDto result = lottoMainService.selectLottoNumberByRound(roundNo);
+
+		if(ObjectUtils.isEmpty(result)) {
 			System.out.println("데이터가 없습니다.");
 		}
 		
@@ -65,30 +75,19 @@ public class LottoMainRestController {
 	
 	
 	@PostMapping("/testLottoNumber")
-	public ResponseEntity<LottoResponseDto> testLottoNumber(@RequestBody String roundNo) {
+	public ResponseEntity<List<Integer>> testLottoNumber() {
 		
-		System.out.println("roundNo : " + roundNo);
-		List<LottoNumberDto> result = lottoMainService.selectLottoNumberByRound(roundNo);
+//		List<LottoNumberDto> result = lottoMainService.selectLottoNumberByRound(roundNo);
+		List<Integer> result = lottoMainService.testChoice();
 		System.out.println("result :: " + result);
 		
-		if(result.isEmpty()) {
-			System.out.println("데이터가 없습니다.");
-		}
-		
-		return ResponseEntity.status(HttpStatus.OK).body(null);
-	}
-	
-	
-	@PostMapping("/insertLottoNumber")
-	public ResponseEntity<Object> insertLottoNumbers(@RequestBody LottoNumberDto lottoNumberDto) {
-		
-		System.out.println("winnginLottoNumbers :: " + lottoNumberDto);
-		
-		boolean result = lottoMainService.insertLottoNumber(lottoNumberDto);
+//		if(result.isEmpty()) {
+//			System.out.println("데이터가 없습니다.");
+//		}
 		
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
-	
+
 	
 /**
  * 	excel 파일로 정리한 로또정보 insert하기 위한 코드(필요 시 주석 해제 후 사용)

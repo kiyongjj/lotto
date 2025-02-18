@@ -14,9 +14,13 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
+import kr.co.finotek.lotto.domain.lotto.Lotto;
 import kr.co.finotek.lotto.dto.LottoMainDto;
 import kr.co.finotek.lotto.dto.LottoNumberDto;
+import kr.co.finotek.lotto.dto.request.LottoWriteDto;
+import kr.co.finotek.lotto.dto.response.LottoResponseDto;
 import kr.co.finotek.lotto.mapper.LottoMainMapper;
+import kr.co.finotek.lotto.repo.LottoRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LottoMainService {
 
+	private final LottoRepository lottoRepository;
 	private static final int START_LOTTO_NUMBER = 1;
 	private static final int LOTTO_NUMBER_COUNT = 6;
     private static final int END_LOTTO_NUMBER = 45;
@@ -64,6 +69,30 @@ public class LottoMainService {
     	return result;
     }
     
+//    public List<Integer> testChoice() {
+//    	
+//    	List<Integer> lottoNumberCollections = collectNumbers();
+//    	List<Integer> result = selectNumbers(lottoNumberCollections);
+//    	boolean rtn = checkLottoNumber(result);
+//    	convertLotto();
+//    	return result;
+//    }
+//    
+//    public void convertLotto() {
+//
+//    	List<Integer> convertList = new ArrayList<>();
+//    	for(int index = 0 ; index < cachedLottoNumbers.size() ; index++) {
+//	    	convertList.add(cachedLottoNumbers.get(index).getFirstNum());
+//	    	convertList.add(cachedLottoNumbers.get(index).getSecondNum());
+//	    	convertList.add(cachedLottoNumbers.get(index).getThirdNum());
+//	    	convertList.add(cachedLottoNumbers.get(index).getFourthNum());
+//	    	convertList.add(cachedLottoNumbers.get(index).getFifthNum());
+//	    	convertList.add(cachedLottoNumbers.get(index).getSixthNum());
+//    	}
+//    	for(int i = 0 ; i < convertList.size() ; i++) {
+//    		System.out.println(convertList.get(i));
+//    	}
+//    }
     
     /**
      * 랜덤 횟수만큼 로또 번호 추출, List에 저장.
@@ -287,8 +316,10 @@ public class LottoMainService {
     }
     
     
-    public List<LottoNumberDto> selectLottoNumberByRound(String roundNo) {
-    	return lottoMainMapper.selectLottoNumberByRound(roundNo);
+    public LottoResponseDto selectLottoNumberByRound(String roundNo) {
+    	Lotto lotto = lottoRepository.findById(roundNo)
+    			.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
+    	return new LottoResponseDto(lotto);
     }
     
     
