@@ -74,19 +74,17 @@ public class LottoMainRestController {
 	}
 	
 	
-	@PostMapping("/testLottoNumber")
-	public ResponseEntity<List<Integer>> testLottoNumber() {
-		
-//		List<LottoNumberDto> result = lottoMainService.selectLottoNumberByRound(roundNo);
-		List<Integer> result = lottoMainService.testChoice();
-		System.out.println("result :: " + result);
-		
-//		if(result.isEmpty()) {
-//			System.out.println("데이터가 없습니다.");
-//		}
-		
-		return ResponseEntity.status(HttpStatus.OK).body(result);
-	}
+//	@PostMapping("/testLottoNumber")
+//	public ResponseEntity<LottoMainDto> testLottoNumber() {
+//		
+//		LottoMainDto result = lottoMainService.choiceTest();
+//
+//		System.out.println("result :: " + result);
+//		boolean rtn = lottoMainService.winningLotteryTest(result);
+//		System.out.println("rtn : " + rtn);
+//		
+//		return ResponseEntity.status(HttpStatus.OK).body(result);
+//	}
 
 	
 /**

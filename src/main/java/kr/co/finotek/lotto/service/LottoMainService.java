@@ -1,13 +1,9 @@
 package kr.co.finotek.lotto.service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -17,7 +13,6 @@ import org.springframework.stereotype.Service;
 import kr.co.finotek.lotto.domain.lotto.Lotto;
 import kr.co.finotek.lotto.dto.LottoMainDto;
 import kr.co.finotek.lotto.dto.LottoNumberDto;
-import kr.co.finotek.lotto.dto.request.LottoWriteDto;
 import kr.co.finotek.lotto.dto.response.LottoResponseDto;
 import kr.co.finotek.lotto.mapper.LottoMainMapper;
 import kr.co.finotek.lotto.repo.LottoRepository;
@@ -30,18 +25,15 @@ import lombok.extern.slf4j.Slf4j;
 public class LottoMainService {
 
 	private final LottoRepository lottoRepository;
+    private LottoMainMapper lottoMainMapper;
+    
 	private static final int START_LOTTO_NUMBER = 1;
 	private static final int LOTTO_NUMBER_COUNT = 6;
     private static final int END_LOTTO_NUMBER = 45;
+    
     private List<LottoMainDto> cachedLottoNumbers = new ArrayList<>();
     private List<Double> probability = new ArrayList<>();
-	
 
-    private static final BigDecimal LOTTO_PRICE = BigDecimal.valueOf(1000);
-
-	Map<String, List<LottoNumberDto>> lottoGroups = new HashMap<String, List<LottoNumberDto>>();
-	
-    private LottoMainMapper lottoMainMapper;
     
     public void initProcesses() {
     	// 로또 번호 캐싱
@@ -69,30 +61,6 @@ public class LottoMainService {
     	return result;
     }
     
-//    public List<Integer> testChoice() {
-//    	
-//    	List<Integer> lottoNumberCollections = collectNumbers();
-//    	List<Integer> result = selectNumbers(lottoNumberCollections);
-//    	boolean rtn = checkLottoNumber(result);
-//    	convertLotto();
-//    	return result;
-//    }
-//    
-//    public void convertLotto() {
-//
-//    	List<Integer> convertList = new ArrayList<>();
-//    	for(int index = 0 ; index < cachedLottoNumbers.size() ; index++) {
-//	    	convertList.add(cachedLottoNumbers.get(index).getFirstNum());
-//	    	convertList.add(cachedLottoNumbers.get(index).getSecondNum());
-//	    	convertList.add(cachedLottoNumbers.get(index).getThirdNum());
-//	    	convertList.add(cachedLottoNumbers.get(index).getFourthNum());
-//	    	convertList.add(cachedLottoNumbers.get(index).getFifthNum());
-//	    	convertList.add(cachedLottoNumbers.get(index).getSixthNum());
-//    	}
-//    	for(int i = 0 ; i < convertList.size() ; i++) {
-//    		System.out.println(convertList.get(i));
-//    	}
-//    }
     
     /**
      * 랜덤 횟수만큼 로또 번호 추출, List에 저장.
@@ -189,13 +157,7 @@ public class LottoMainService {
     	boolean rtn = false;
     	
     	for(int i = 0 ; i < cachedLottoNumbers.size() ; i++) {
-			List<Integer> tmpList = new ArrayList<>();
-			tmpList.add(cachedLottoNumbers.get(i).getFirstNum());
-			tmpList.add(cachedLottoNumbers.get(i).getSecondNum());
-			tmpList.add(cachedLottoNumbers.get(i).getThirdNum());
-			tmpList.add(cachedLottoNumbers.get(i).getFourthNum());
-			tmpList.add(cachedLottoNumbers.get(i).getFifthNum());
-			tmpList.add(cachedLottoNumbers.get(i).getSixthNum());
+    		List<Integer> tmpList = reverseLotto(cachedLottoNumbers.get(i));
 
 			rtn = lottoNumber.containsAll(tmpList);
 
@@ -210,7 +172,7 @@ public class LottoMainService {
     
     
 	/**
-	 * List 형식을 LottoNumberDto 형식으로 매칭
+	 * List<Integer> => LottoMainDto
 	 * @param results
 	 * @return LottoMainDto
 	 */
@@ -226,6 +188,26 @@ public class LottoMainService {
     	lnd.setSixthNum(results.get(5));
     	
     	return lnd;
+	}
+	
+	
+	/**
+	 * LottoMainDto => List<Integer>
+	 * @param lottoMainDto
+	 * @return
+	 */
+	public List<Integer> reverseLotto(LottoMainDto lottoMainDto) {
+		
+		List<Integer> result = new ArrayList<>();
+		
+		result.add(lottoMainDto.getFirstNum());
+		result.add(lottoMainDto.getSecondNum());
+		result.add(lottoMainDto.getThirdNum());
+		result.add(lottoMainDto.getFourthNum());
+		result.add(lottoMainDto.getFifthNum());
+		result.add(lottoMainDto.getSixthNum());
+		
+		return result;
 	}
 	
 	
@@ -255,32 +237,6 @@ public class LottoMainService {
 
     	return tmpProbability;
     }
-	
-    
-    /**
-     * 로또 생성 시 중복되는지 테스트용 함수
-     * @return List<Integer>
-     */
-    public List<Integer> testLottoNumber(String roundNo) {
-
-		List<Integer> result = new ArrayList<>();
-		int count = 0;
-		boolean rtn = true;
-		
-		do {
-			List<Integer> lottoNumberCollections = collectNumbers();
-			result = selectNumbers(lottoNumberCollections);
-			
-			rtn = checkLottoNumber(result);
-			count++;
-			if(rtn) {
-				log.debug("result :: " + result + ", rtn :: " + rtn + " , count :: " + count);
-				return result;
-			}
-		} while(!rtn);
-		
-		return result;
-	}
     
     
     /**
@@ -303,11 +259,6 @@ public class LottoMainService {
 	 */
     public List<String> selectLottoRoundNumber() {
     	return lottoMainMapper.selectLottoRoundNumber();
-    }
-    
-
-    public List<LottoNumberDto> selectLottoNumbers() {
-    	return lottoMainMapper.selectLottoNumbers();
     }
     
     
@@ -335,13 +286,29 @@ public class LottoMainService {
     }
     
     
-    public int getNumberOfLottoByMoneyPaid(BigDecimal lottoMoney) {
-        return lottoMoney.divide(LOTTO_PRICE, RoundingMode.DOWN).intValue();
-    }
-    
-    
-	public int countOfLottoRound() {
-		return lottoMainMapper.countOfLottoRound();
+    /**
+     * 로또 생성 시 중복되는지 테스트용 함수
+     * @return List<Integer>
+     */
+    public List<Integer> testLottoNumber(String roundNo) {
+
+		List<Integer> result = new ArrayList<>();
+		int count = 0;
+		boolean rtn = true;
+		
+		do {
+			List<Integer> lottoNumberCollections = collectNumbers();
+			result = selectNumbers(lottoNumberCollections);
+			
+			rtn = checkLottoNumber(result);
+			count++;
+			if(rtn) {
+				log.debug("result :: " + result + ", rtn :: " + rtn + " , count :: " + count);
+				return result;
+			}
+		} while(!rtn);
+		
+		return result;
 	}
    
 }
