@@ -111,7 +111,6 @@ public class LottoMainService {
 			double rand = secureRandom.nextDouble();
 			double cumulativeProbability = 0.0;
 			
-			
 			for(int j = 0 ; j < lottoNumberCollections.size() ; j++) {
 				cumulativeProbability += probability.get(lottoNumberCollections.get(j) - 1);
 				if(lottoNumberCollections.size() > 39 && rand >= cumulativeProbability) {
