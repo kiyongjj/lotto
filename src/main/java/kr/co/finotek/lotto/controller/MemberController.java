@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.finotek.lotto.domain.member.Member;
+import kr.co.finotek.lotto.dto.LoginDto;
 import kr.co.finotek.lotto.dto.MemberCreateRequestDto;
 import kr.co.finotek.lotto.dto.MemberResponseDto;
 import kr.co.finotek.lotto.service.MemberService;
@@ -24,12 +25,23 @@ public class MemberController {
 		return memberService.registMember(memberDto);
 	}
 	
+//	@PostMapping("/login")
+//	public MemberResponseDto memberLogin(@RequestBody LoginDto memberDto) {
+//		
+//		System.out.println("memberDto -1- >> " + memberDto.getMember_id());
+//		System.out.println("memberDto -2- >> " + memberDto.getPassword());
+//		
+//		return memberService.loginChk(memberDto);
+//	}
+	
+	
 	@PostMapping("/login")
-	public MemberResponseDto memberLogin(@RequestBody MemberCreateRequestDto memberDto) {
+	public Boolean memberLogin(@RequestBody LoginDto memberDto) {
 		
-		System.out.println("memberDto -1- >> " + memberDto.getId());
+		System.out.println("memberDto -1- >> " + memberDto.getMember_id());
 		System.out.println("memberDto -2- >> " + memberDto.getPassword());
+		boolean result = memberService.loginChk(memberDto);
 		
-		return memberService.loginChk(memberDto);
+		return result;
 	}
 }

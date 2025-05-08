@@ -19,7 +19,7 @@
  
 function login() {
 	let param = {};
-	param.id = $('#id').val();
+	param.member_id = $('#id').val();
 	param.password = $('#password').val();
 	console.log("submit", param);
 	
@@ -32,9 +32,9 @@ function login() {
 		success:function(data) {
 			
 			console.log(data);
-			if(data.body == true) {
+			if(data == true) {
 				console.log("true");
-				document.location.href = "http://localhost:8081/lotto/html/lotto_main.html";
+				document.location.href = "http://localhost:8081/lotto/html/index.html";
 			}
 			
 		},

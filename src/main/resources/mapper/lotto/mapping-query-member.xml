@@ -15,5 +15,17 @@
 			order by a.draw_date desc
 			 -->
 	</select>
+	<select id="selectUserForLogin"
+		resultType="kr.co.finotek.lotto.dto.LoginDto">
+			select	a.member_id
+				, a.user_name
+				, a.password
+				, a.email
+				, a.mobile
+				, a.birth_day
+			from member a
+			where
+				a.member_id = #{member_id}
+	</select>
 
 </mapper>

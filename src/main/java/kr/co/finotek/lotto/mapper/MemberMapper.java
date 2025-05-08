@@ -12,4 +12,6 @@ public interface MemberMapper {
 
 	List<LoginDto> selectMembers();
 
+	List<LoginDto> selectUserForLogin();
+
 }

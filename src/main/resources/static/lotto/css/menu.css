@@ -1,0 +1,60 @@
+@charset "UTF-8";
+
+/* 2차 이상의 메뉴만 none 값을 추가 */
+.top-bar__menu-box-1 > ul ul {
+	display: none;
+}
+body, ul, li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+a {
+	color: inherit;
+	text-decoration: none;
+	font-size: 1rem;
+}
+.con {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* 변수 생성 */
+:root {
+	--site-width: 800px;
+	/*background: yellow;*/
+}
+/* 사이트 최소 너비 설정 */
+.con-min-width {
+	min-width: var(--site-width);
+}
+/* 실질적으로 메뉴에 사용할 너비 설정 */
+.top-bar > .con {
+	width: var(--site-width);
+}
+.top-bar__menu-box-1 > ul > li {
+	display: inline-block;
+}
+.top-bar__menu-box-1 {
+	text-align: center;
+	margin-top: 100px;
+}
+.top-bar__menu-box-1 ul {
+	background-color: black;
+	color: white;
+}
+.first-menu {
+	display: black;
+	font-size: 1.7em;
+	padding: 5px 40px;
+}
+/* 모든 메뉴를 마우스 인식 시 배경색을 변경 */
+.top-bar__menu-box-1 ul > li:hover > a {
+	background-color: #555;
+}
+
+/* 2차 메뉴가 보이도록 만들어 보자 */
+.top-bar__menu-box-1 > ul > li:hover > ul {
+	display: block;
+}
+/* 삭제 버튼 스타일 */

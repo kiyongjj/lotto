@@ -40,17 +40,20 @@ $(function() {
 	
 	$('#testLottoNumber').click(function() {
 
-		//let param = {};
-		//const param = document.getElementById('roundNumber');
-		const roundNo = '1150회';
-		//param.roundNo = roundNo.options[roundNo.selectedIndex].value;
+		if(!$('#lottoNumbers').val()) {
+			alert("입력값이 없습니다.");
+			return;
+		}
 		
+		let param = {}; 
+		param = splitLotto($('#lottoNumbers').val());
+		console.log(param);
+
 		$.ajax({
 			type:'post',
 			dataType: "json",
 			contentType: 'application/json',
-			//data: JSON.stringify(roundNo),
-			data: roundNo,
+			data: JSON.stringify(param),
 			url:localStorage.getItem("bbsContext") + "/lotto/testLottoNumber",
 			success:function(data) {
 				
@@ -172,7 +175,6 @@ function chageRoundNumber() {
 function splitLotto(data) {
 	
 	let param = {};
-	
 	let resultArray = data.split(',');
 	
 	param.firstNum = resultArray[0];
@@ -181,7 +183,9 @@ function splitLotto(data) {
 	param.fourthNum = resultArray[3];
 	param.fifthNum = resultArray[4];
 	param.sixthNum = resultArray[5];
-	param.bonusNum = resultArray[6];
+	if(resultArray.length == 7) {
+		param.bonusNum = resultArray[6];
+	}
 	
 	return param;
 }
@@ -284,4 +288,25 @@ function deleteDynamicTable() {
 	if (table) {
 		tableContainer.removeChild(table);
 	}
+}
+
+
+//로그인
+function userIdLogin() {
+
+console.log("test");
+	const userId = 1;
+	$.ajax({
+		type:'post',
+		dataType: "json",
+		contentType: 'application/json',
+		//data: JSON.stringify(userId),
+		url:localStorage.getItem("bbsContext") + "/users/" + userId,
+		success:function(data) {
+			console.log(data);
+		},
+		error:function(data,sataus,err) {
+			alert("데이터 요청에 실패하였습니다.\r status : " + status);
+		}
+	});
 }

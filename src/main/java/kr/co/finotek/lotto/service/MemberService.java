@@ -27,18 +27,16 @@ public class MemberService {
 		return memberRepository.save(memberDto.toEntity());
 	}
 	@Transactional(readOnly = true)
-	public MemberResponseDto loginChk(MemberCreateRequestDto memberDto) {
+	public Boolean loginChk(LoginDto memberDto) {
 
 		boolean rtn = false;
 
-//		List<LoginDto> ld = memberMapper.selectMembers();
-//		System.out.println(">> " + memberRepository.findById(id).get().getName());
-		Member member = memberRepository.findById(memberDto.getId())
-				.orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
-		
-		if(member.getPassword().equals(memberDto.getPassword())) {
-			System.out.println("true >> " + member.getPassword());
+		List<LoginDto> member = memberMapper.selectUserForLogin();
+		System.out.println("member : " + member);
+		if(member.size() > 0) {
+			rtn = true;
 		}
-		return new MemberResponseDto(member);
+		
+		return rtn;
 	}
 }
