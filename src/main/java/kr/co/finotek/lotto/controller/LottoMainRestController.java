@@ -53,7 +53,6 @@ public class LottoMainRestController {
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 	
-	
 	@PostMapping("/buyingLottoTicket/{cost}")
 	public ResponseEntity<List<LottoMainDto>> buyingLottoTicket(@PathVariable int cost) {
 		
@@ -65,7 +64,6 @@ public class LottoMainRestController {
 			return ResponseEntity.status(HttpStatus.OK).body(result);
 		}
 	}
-	
 	
 	@PostMapping("/selectLottoNumber")
 	public ResponseEntity<LottoResponseDto> selectLottoNumber(@RequestBody String roundNo) {

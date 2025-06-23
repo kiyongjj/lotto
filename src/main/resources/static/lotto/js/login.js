@@ -19,10 +19,10 @@
  
 function login() {
 	let param = {};
-	param.member_id = $('#id').val();
+	param.userId = $('#userId').val();
 	param.password = $('#password').val();
 	console.log("submit", param);
-	
+	return;
 	$.ajax({
 		type:'post',
 		dataType: "json",

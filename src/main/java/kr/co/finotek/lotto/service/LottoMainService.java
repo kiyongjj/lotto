@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LottoMainService {
 
 	private final LottoRepository lottoRepository;
-	private LottoMainMapper lottoMainMapper;
+	private final LottoMainMapper lottoMainMapper;
 	
 	private static final int START_LOTTO_NUMBER = 1;
 	private static final int LOTTO_NUMBER_COUNT = 6;
@@ -47,39 +47,35 @@ public class LottoMainService {
 	 * @param count
 	 * @return List<LottoMainDto>
 	 */
-	public List<LottoMainDto> choice(int count) {
-		List<LottoMainDto> result = new ArrayList<>();
-		List<LottoMainDto> tmpList = new ArrayList<>();
-		List<Integer> lotto = new ArrayList<>();
-		
-		int rand = generateRandomNum(1000, 10000);
-		
-		System.out.println(rand);
-		
-		for(int i = 0 ; i < rand ; i++) {
-			boolean rtn = true;
-			lotto = choiceLottoNumbers();
-			rtn = checkLottoNumber(tmpList, lotto);
+    public List<LottoMainDto> choice(int count) {
+    	List<LottoMainDto> result = new ArrayList<>();
+    	List<LottoMainDto> tmpList = new ArrayList<>();
+    	List<Integer> lotto = new ArrayList<>();
+    	
+    	int rand = generateRandomNum(1000, 20000);
+    	
+    	for(int i = 0 ; i < rand ; i++) {
+    		boolean rtn = false;
+    		lotto = choiceLottoNumbers();
 
-			if(!rtn) {
-				tmpList.add(convertLotto(lotto));
-			}
-		}
-	
-		log.info("*** lottoMainService.choice -tmpList- : " + tmpList.size());
-		
-//		for(LottoMainDto dto : result) {
-//			System.out.println(dto);
-//		}
+    		rtn = checkLottoNumber(tmpList, lotto);
+    		if(!rtn) {
+    			tmpList.add(convertLotto(lotto));
+    		}
+    		
+    	}
 
-		for(int j = 0 ; j < count ; j++) {
-			result.add(tmpList.get(generateRandomNum(rand)));
-		}
-		
-		log.info("*** lottoMainService.choice -result- : " + result);
-		
-		return result;
-	}
+    	log.info("*** lottoMainService.choice -tmpList- : " + tmpList);
+    	log.info("*** lottoMainService.choice -tmpList- : " + tmpList.size());
+    	
+    	for(int j = count ; j > 0 ; j--) {
+    		result.add(tmpList.get(tmpList.size() - j));
+    	}
+    	
+    	log.info("*** lottoMainService.choice -result- : " + result);
+    	
+    	return result;
+    }
 	
 	/**
 	 * 로또 당첨번호 테스트용 코드
@@ -136,31 +132,6 @@ public class LottoMainService {
 		}
 		
 		return results;
-	}
-	   
-	    
-	public LottoMainDto choiceLottoNumbers2() {
-		List<LottoMainDto> result = new ArrayList<>();
-	
-		int randomNum = generateRandomNum(1000, 10000);
-		
-		boolean rtn = true;
-		
-		for(int i = 0 ; i < randomNum ; i++) {
-	    	List<Integer> lottoNumberCollections = collectNumbers();
-	    	List<Integer> results = selectNumbers(lottoNumberCollections);
-			rtn = checkLottoNumber(cachedLottoNumbers, results);
-			if(rtn) {
-				log.info("result :: " + results + ", rtn :: "
-				+ rtn + ", count :: " + i);
-				i = i - 1;
-			} else {
-				result.add(convertLotto(results));
-			}
-		}
-		randomNum = generateRandomNum(0, randomNum);
-		
-		return result.get(randomNum);
 	}
 	
 	
@@ -345,7 +316,7 @@ public class LottoMainService {
 	
 	public LottoResponseDto selectLottoNumberByRound(String roundNo) {
 		Lotto lotto = lottoRepository.findById(roundNo)
-				.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
+				.orElseThrow(() -> new IllegalArgumentException("해당 회차가 존재하지 않습니다."));
 		return new LottoResponseDto(lotto);
 	}
 	
