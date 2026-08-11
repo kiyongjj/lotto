@@ -10,6 +10,23 @@ $(function() {
 
 	selectRoundNumbers();
 
+	$('#downloadExcel').click(function() {
+		$.ajax({
+			type:'post',
+			dataType: "json",
+			contentType: 'application/json',
+//			data: JSON.stringify(param),
+			url:localStorage.getItem("bbsContext") + "/lotto/api/excel/download",
+			success:function(data) {
+				
+				console.log("naverLogin", data);
+			},
+			error:function(data,sataus,err) {
+				alert("데이터 요청에 실패하였습니다.\r status : " + status);
+			}
+		});
+	});
+	
 	// 로또 당첨번호 DB검색
 	$('#selectLottoNumber').click(function() {
 		console.log("selectLottoNumber");
@@ -38,7 +55,7 @@ $(function() {
 		});
 	});
 	
-	$('#testLottoNumber').click(function() {
+	$('#checkWinningHistory').click(function() {
 
 		if(!$('#lottoNumbers').val()) {
 			alert("입력값이 없습니다.");
@@ -54,11 +71,11 @@ $(function() {
 			dataType: "json",
 			contentType: 'application/json',
 			data: JSON.stringify(param),
-			url:localStorage.getItem("bbsContext") + "/lotto/testLottoNumber",
+			url:localStorage.getItem("bbsContext") + "/lotto/checkWinningHistory",
 			success:function(data) {
 				
 				console.log(data);
-				initializeDynamicTable(data, 'B');
+				//initializeDynamicTable(data, 'B');
 				
 			},
 			error:function(data,sataus,err) {
@@ -291,19 +308,22 @@ function deleteDynamicTable() {
 }
 
 
-//로그인
-function userIdLogin() {
+function collectLottoNumbers() {
 
-console.log("test");
-	const userId = 1;
+	const cost = $('#buyingCost').val();
 	$.ajax({
 		type:'post',
 		dataType: "json",
 		contentType: 'application/json',
-		//data: JSON.stringify(userId),
-		url:localStorage.getItem("bbsContext") + "/users/" + userId,
+		url:localStorage.getItem("bbsContext") + "/lotto/collectLottoNumbers/" + cost,
 		success:function(data) {
 			console.log(data);
+
+			if(data !== null) {
+				initializeDynamicTable(data, "B");
+			} else {
+				console.log("data is null");
+			}
 		},
 		error:function(data,sataus,err) {
 			alert("데이터 요청에 실패하였습니다.\r status : " + status);

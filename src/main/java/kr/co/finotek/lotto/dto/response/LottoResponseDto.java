@@ -34,7 +34,7 @@ public class LottoResponseDto {
 	@Builder
 	public LottoResponseDto(String roundNo, int firstNum, int secondNum,
 			int thirdNum, int fourthNum, int fifthNum, int sixthNum,
-			int bonusNum, LocalDate drawDate) {
+			int bonusNum, int totalSum, LocalDate drawDate) {
 		this.roundNo = roundNo;
 		this.firstNum = firstNum;
 		this.secondNum = secondNum;
@@ -60,4 +60,5 @@ public class LottoResponseDto {
 				.drawDate(lotto.getDrawDate())
 				.build();
 	}
+
 }

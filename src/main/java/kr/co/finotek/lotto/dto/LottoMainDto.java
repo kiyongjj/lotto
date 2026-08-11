@@ -22,4 +22,6 @@ public class LottoMainDto {
 	private int fourthNum;
 	private int fifthNum;
 	private int sixthNum;
+	private int totalSum;
+	private int collectCnt;
 }

@@ -12,7 +12,7 @@ public interface LottoMainMapper {
 
 	List<LottoMainDto> selectLottoAllRounds();
 	
-	List<LottoNumberDto> selectLottoNumberByRound(String roundNo);
+	LottoNumberDto selectLottoNumberByRound(String roundNo);
 	
 	int insertLottoNumber(LottoNumberDto lottoNumberDto);
 
